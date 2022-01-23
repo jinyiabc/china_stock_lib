@@ -1,0 +1,41 @@
+Metadata-Version: 2.1
+Name: helper-jinyi
+Version: 1.0.4
+Summary: WIND Api.
+Home-page: https://github.com/jinyiabc/china_stock_lib
+Author: jin yi
+Author-email: jinyiabc@gmail.com
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/jinyiabc/china_stock_lib/issues
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Install
+`pip install --upgrade -q git+https://github.com/jinyiabc/china_stock_lib.git    `
+
+# Or download and build
+`git clone https://github.com/jinyiabc/china_stock_lib.git`  \
+` pip install setup.py`
+# Usage
+`import get_data ` \
+`get_data.get_module_3('300072.csv')`
+
+# Script Usage: 
+`wsd -s "20211231" -e "20211231" -d test1 -t test_wsd3` \
+`wset -s "20220121" -e "20220121" -d test1 -t test_wset1 -se '000300.SH' --github` \
+`wss -s "20201231" -e "20201231" -d test1 -t wind_energy_cbond -w '000001.SZ,110034.SH'` \
+
+
+test
+
+C:\Users\jinyi\.virtualenvs\helper-4Wpgvp3w\Scripts\activate.bat      
+set https_proxy=http://127.0.0.1:10809         
+pip install sqlalchemy  
+pip install mysql-connector-python   
+python C:\Wind\Wind.NET.Client\WindNET\bin\installWindPy.py C:\wind\wind.net.client\windnet
+

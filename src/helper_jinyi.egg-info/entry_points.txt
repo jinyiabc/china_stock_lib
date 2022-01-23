@@ -1,0 +1,6 @@
+[console_scripts]
+upload_github = helper.upload_github:upload_github_script
+wsd = helper.script:run_wsd
+wset = helper.script:run_wset
+wss = helper.script:run_wss
+
