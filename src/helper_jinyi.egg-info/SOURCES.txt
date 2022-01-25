@@ -2,6 +2,7 @@ LICENSE
 README.md
 pyproject.toml
 setup.cfg
+src/helper/Loader.py
 src/helper/WSDLoader.py
 src/helper/WSETLoader.py
 src/helper/WSSLoader.py
@@ -18,3 +19,5 @@ src/helper_jinyi.egg-info/dependency_links.txt
 src/helper_jinyi.egg-info/entry_points.txt
 src/helper_jinyi.egg-info/top_level.txt
 test/test_get_data.py
+test/test_get_data_sql.py
+test/test_mysql_dbconnection.py

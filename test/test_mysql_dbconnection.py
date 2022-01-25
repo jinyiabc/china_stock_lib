@@ -1,32 +1,7 @@
-from importlib import resources
+from src.helper.mysql_dbconnection import mysql_dbconnection
 
-from _mysql_connector import MySQLInterfaceError
-from sqlalchemy  import create_engine
-import config
-# from helper import config
-with resources.path('helper', 'mysql.cfg') as p:
-    resource_path = str(p)
-cfg = config.Config(resource_path)
 
-def mysql_dbconnection(database=None):
-    '''
-    database_url = mysql+mysqlconnector://<user>:<password>@<host>[:<port>]/<dbname>
-    '''
-    if database is None:
-        database_url = 'mysql+mysqlconnector://{}:{}@{}?charset=utf8mb4'.format(cfg['user'], cfg['password'],
-                                                                            cfg['host'])
-    else:
-        database_url = 'mysql+mysqlconnector://{}:{}@{}/{}?charset=utf8mb4'.format(cfg['user'], cfg['password'], cfg['host'], database)
-
-    sqlEngine = create_engine(database_url, pool_recycle=3600)
-
-    if cfg['password'] == "xxxxxxx":
-        print(f"Please modify mysql.cfg file under {resource_path} to connect mysql properly.")
-        exit()
-
-    return sqlEngine.connect()
-
-if __name__ == '__main__':
+def test_mysql_dbconnection():
     import pandas as pd
     test = 'READ'  # Set to 'WRITE' to test.
     if test == 'WRITE':

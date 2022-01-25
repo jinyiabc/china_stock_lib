@@ -22,6 +22,8 @@ Update mysql.cfg under directory. Checked the path by: \
 `wind_codes = loader.get_windcodes(sector)`\
 `loader.fetch_historical_data(wind_codes)`
 
+`data = get_data_sql(codes, start_date, end_date, database, table_name, field, options)
+`
 
 # Script Usage: 
 `wsd -s "20211231" -e "20211231" -d test1 -t test_wsd3` \

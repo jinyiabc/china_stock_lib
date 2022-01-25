@@ -15,10 +15,11 @@ def main(start_date, end_date):
     # The demonstration uses SQLite as an example. If you need to use another database, please refer to the documentation of sqlalchemy
     # db_engine = create_engine('sqlite:///example.db')
     # db_engine = mysql_dbconnection(database=database)
-    loader = WSDLoader(start_date, end_date, database, table_name)
+    loader = WSDLoader(start_date, end_date, database, table_name, field, options)
 
-    wind_codes = loader.get_windcodes()
+    # print(loader.current_time) # check for parent property
 
+    wind_codes = loader.get_windcodes(sector=sector)
     if type(wind_codes) is not int:
         loader.fetch_historical_data(wind_codes)
     else:
@@ -29,11 +30,15 @@ if __name__ == '__main__':
     start = '20211231'
     end = '20211231'
     database = 'test1'
-    table_name = 'test_wsd3'
-    main(start, end)
+    table_name = 'test_wsd4'
+    field = "trade_code,close,windcode"
+    options = "PriceAdj=B"
+    sector = '000300.SH'
+    # main(start, end)
 
-    # data = WSDLoader.fetchall_data('002500.SZ')
-    # print(data)
+    loader = WSDLoader(start, end, database, table_name, field, options)
+    data = loader.fetchall_data(wind_code='002460.SZ')
+    print(data)
     # WSDLoader.fetchall_log()
 
     # command usage:
