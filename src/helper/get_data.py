@@ -1,3 +1,4 @@
+import numpy as np
 import os
 import zipfile
 import urllib.request
@@ -5,7 +6,7 @@ from urllib.error import HTTPError
 
 import pandas as pd
 
-from helper.WSDLoader import WSDLoader
+# from helper.Loader import Loader
 
 base_url = "https://github.com/jinyiabc/china_stock_data/raw/main/"
 
@@ -36,11 +37,12 @@ def get_module_1(username):
 def get_module_2(username):
     get_data("module-{0:02n}/{1:s}.zip".format(2, username))
 
+
 def get_module_3(username):
     get_data("module-{0:02n}/{1:s}".format(3, username))
 
 
-def get_data_sql(wind_codes, start_date, end_date, database, table_name, field, options):
+def get_data_sql(start_date, end_date, dataframe, field):
     '''
     wind_codes = list of wind_code
     start_date = '2011-01-01'
@@ -50,28 +52,39 @@ def get_data_sql(wind_codes, start_date, end_date, database, table_name, field, 
     field = "trade_code,close,windcode"
     options =  "PriceAdj=B",
     '''
-
-    loader = WSDLoader(start_date, end_date, database, table_name, field, options)
-
-    # Get data from wind api.
-    # loader.fetch_historical_data(wind_codes,)
-
     # Get data from mysql.
     date = pd.date_range(start_date, end_date)
-    data = pd.DataFrame(index=date, columns=['sector'])
+    data = pd.DataFrame(index=date, columns=['dummy_column'])
     data.index.name = 'date'
-
-    for wind_code in wind_codes:
-        wsd_data = loader.fetchall_data(wind_code)
-        # print(wsd_data['CLOSE'])
-        wsd_data.rename(columns={'CLOSE': wind_code}, inplace=True)
-        # data = data.join(wsd_data[f"{wind_code}"])
+    # data = pd.DataFrame(index=dataframe['index'])
+    wind_codes = dataframe['WINDCODE'].drop_duplicates().to_list()
+    for index, wind_code in enumerate(wind_codes):
+        # wsd_data = Loader.fetch_data(database, table_name, wind_code, field)
+        wsd_data = dataframe.query(f"WINDCODE=='{wind_code}'")
+        # wsd_data = wsd_data.copy(deep=True)
+        wsd_data = wsd_data.rename(columns={field: wind_code,})
         data = data.join(wsd_data.set_index('index')[wind_code])
 
+    data.drop(columns=["dummy_column", ], inplace=True)
+    data.drop_duplicates(inplace=True)
     # drop bond due to negative close price due to "PriceAdj=F".
     # data.drop(columns=["sector", "113017.SH", "128062.SZ"], inplace=True)
     # Drop sector only.
-    data.drop(columns=["sector", ], inplace=True)
+    # data.drop(columns=["dummy_column", ], inplace=True)
     # print(data)
     # data.to_csv(f'resource/portfolio0124b.csv', mode='a')
     return data
+
+def pivot_table_all(dataframe, index, columns, values,):
+
+    table = pd.pivot_table(dataframe, values=values, index=index,
+                           columns=columns, aggfunc=np.sum)
+
+    # convert columns from multiindex to single index.
+    df = table.columns
+    columns = df.to_list()
+    table.columns = columns
+    # rename index name to date.
+    table.index.name = 'date'
+
+    return table

@@ -1,3 +1,6 @@
+import sys
+
+import os
 from importlib import resources
 
 from _mysql_connector import MySQLInterfaceError
@@ -6,7 +9,10 @@ import config
 # from helper import config
 with resources.path('helper', 'mysql.cfg') as p:
     resource_path = str(p)
-cfg = config.Config(resource_path)
+if os.path.isfile('mysql.cfg'):
+    cfg = config.Config('mysql.cfg')
+else:
+    cfg = config.Config(resource_path)
 
 def mysql_dbconnection(database=None):
     '''
@@ -22,7 +28,7 @@ def mysql_dbconnection(database=None):
 
     if cfg['password'] == "xxxxxxx":
         print(f"Please modify mysql.cfg file under {resource_path} to connect mysql properly.")
-        exit()
+        sys.exit()
 
     return sqlEngine.connect()
 

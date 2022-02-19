@@ -1,6 +1,7 @@
 
 import time
 import config
+import os
 import mysql.connector
 import pandas as pd
 from WindPy import w
@@ -9,7 +10,10 @@ from helper.mysql_dbconnection import mysql_dbconnection
 from helper.upload_github import upload_github
 with resources.path('helper', 'mysql.cfg') as p:
     resource_path = str(p)
-cfg = config.Config(resource_path)
+if os.path.isfile('mysql.cfg'):
+    cfg = config.Config('mysql.cfg')
+else:
+    cfg = config.Config(resource_path)
 
 class Loader:
 
@@ -22,6 +26,7 @@ class Loader:
         self._sector = sector
         self._field = field
         self._options = options
+        self._cfg = cfg
 
     @property
     def current_time(self):
@@ -74,18 +79,47 @@ class Loader:
             # Return a list of windcodes if the data is achieved
             return stock_codes.Data[0]
 
-    # @staticmethod
-    def fetchall_data(self, wind_code):
+    @staticmethod
+    def fetch_data(database, table_name, wind_codes, field):
         """
-        Fetch data from SQLite database
+        Fetch data from MYSQL database
         :param str, wind_code:
         :return: None
         """
-        table_name = self._table_name
+        # table_name = self._table_name
+        # db_engine = self._db_engine
+        db_engine = mysql_dbconnection(database)
+        # field = field.upper()
+        # convert list of string to single string.
+        wind_codes = ','.join( "'" + x + "'" for x in wind_codes)
+        query = ("SELECT " + field + " FROM " + table_name + " "
+                 "WHERE symbol IN (" + wind_codes + ")")
+
+        data = pd.read_sql(query, db_engine, parse_dates=['date'],)
+
+        pd.set_option('display.expand_frame_repr', False)
+
+        if len(data) > 0:
+            print("Data found!")
+        else:
+            print("No data found!")
+        # db_engine.close()
+
+        return data
+
+    # @staticmethod
+    def fetchall_data(self, table_name, field):
+        """
+        Fetch data from MYSQL database
+        :param str, wind_code:
+        :return: None
+        """
+        if table_name is None:
+            table_name = self._table_name
         db_engine = self._db_engine
-        # db_engine = mysql_dbconnection(database)
-        query = ("SELECT * FROM " + table_name + " "
-                 "WHERE WINDCODE ='" + wind_code + "'")
+        field = field.upper()
+
+        query = ("SELECT `index`," + field + " FROM " + table_name + " ")
 
         data = pd.read_sql(query, db_engine)
 
@@ -98,8 +132,6 @@ class Loader:
         # db_engine.close()
 
         return data
-
-
 
     @staticmethod
     def fetchall_log():
@@ -142,6 +174,11 @@ class Loader:
             print(self.current_time, ": SQL Exception :%s" % e)
 
         if UPLOAD_GITHUB is True:
-            data.to_csv(f'resource/{table_name}.csv', mode='a')
+            # TO-DO header None.
+            file_path = f'resource/{table_name}.csv'
+            if not os.path.isfile(file_path):
+                data.to_csv(f'resource/{table_name}.csv')
+            else:
+                data.to_csv(f'resource/{table_name}.csv', mode='a', header=False)
             print(self.current_time, f": Saved {table_name}.CSV.")
 
