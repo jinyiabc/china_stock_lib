@@ -59,6 +59,8 @@ class WSDLoader(Loader):
                                      options,
                                      usedf=True)
             # Check if Wind API runs successfully. If error_code is not 0, it indicators an error occurs
+            data.rename(columns={"WINDCODE": "symbol", }, errors="raise", inplace=True)
+            data.index.names = ['date']
             err_name = wind_code
             if error_code != 0:
                 # Output log

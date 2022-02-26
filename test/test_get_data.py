@@ -1,7 +1,8 @@
 import os
 import shutil
 
-from helper import get_data
+from src.helper import get_data
+from src.helper.get_data import holiday2businessday
 from src.helper.wind import read_wind_excel, read_wind_csv
 
 
@@ -32,3 +33,8 @@ def test_get_data1():
     # assert os.path.isdir("survivorship_free")
     # shutil.rmtree("survivorship_free")
     # os.remove("survivorship_free.zip")
+
+def test_holiday2businessday():
+    import pandas as pd
+    datelist = pd.period_range(start='2022-01-01', end='2022-01-07', freq='D')
+    print(holiday2businessday(datelist))

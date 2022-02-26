@@ -88,3 +88,24 @@ def pivot_table_all(dataframe, index, columns, values,):
     table.index.name = 'date'
 
     return table
+
+def holiday2businessday(datelist):
+    import QuantLib as ql
+    datelist1 = []
+    cal = ql.China()
+    temp = ql.Date(1, 1, 1999)
+    for date in datelist:
+        mydate = ql.Date(date.day, date.month, date.year)
+        if mydate <= temp:
+            mydate = temp + ql.Period(1, ql.Days)
+        while cal.isHoliday(mydate):
+            mydate = mydate + ql.Period(1, ql.Days)
+        temp = mydate
+        datelist1.append(mydate.ISO())
+    return pd.PeriodIndex(datelist1, freq='D')
+
+if __name__ == '__main__':
+    import pandas as pd
+    datelist = pd.period_range(start='2022-01-01', end='2022-01-07', freq='D')
+
+    print(holiday2businessday(datelist))
