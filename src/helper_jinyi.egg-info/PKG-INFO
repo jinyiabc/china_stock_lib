@@ -1,13 +1,11 @@
 Metadata-Version: 2.1
 Name: helper-jinyi
-Version: 1.0.15
+Version: 1.0.17
 Summary: WIND Api.
 Home-page: https://github.com/jinyiabc/china_stock_lib
 Author: jin yi
 Author-email: jinyiabc@gmail.com
-License: UNKNOWN
 Project-URL: Bug Tracker, https://github.com/jinyiabc/china_stock_lib/issues
-Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
@@ -46,5 +44,3 @@ Update mysql.cfg under directory. Checked the path by: \
 `wsd -s "20211231" -e "20211231" -d test1 -t test_wsd3` \
 `wset -s "20220121" -e "20220121" -d test1 -t test_wset1 -se '000300.SH' --github` \
 `wss -s "20201231" -e "20201231" -d test1 -t wind_energy_cbond -w '000001.SZ,110034.SH'` \
-
-

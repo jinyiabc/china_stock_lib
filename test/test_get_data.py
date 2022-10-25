@@ -1,8 +1,10 @@
 import os
+import pandas as pd
 import shutil
 
 from src.helper import get_data
-from src.helper.get_data import holiday2businessday
+from src.helper.Loader import Loader
+from src.helper.get_data import holiday2businessday, day2month
 from src.helper.wind import read_wind_excel, read_wind_csv
 
 
@@ -36,5 +38,26 @@ def test_get_data1():
 
 def test_holiday2businessday():
     import pandas as pd
-    datelist = pd.period_range(start='2022-01-01', end='2022-01-07', freq='D')
+    datelist = pd.period_range(start='2018-01-01', end='2018-12-31', freq='D')
     print(holiday2businessday(datelist))
+
+def test_day2month():
+    database = 'market_research'
+    table_name = 'ohlc'
+    start_date = "2012-01-01"
+    end_date = "2022-01-26"
+    # Get Close data
+    wind_codes = pd.read_csv('resource/sample.txt', sep=' ', header=None, )
+    wind_codes = wind_codes[0].to_list()
+    field = "symbol,date,close,open,high,low"
+    loader = Loader(start_date, end_date, database, table_name, field, None)
+    df = loader.fetch_data(database, table_name, wind_codes, field)
+
+    table2 = (
+        df
+            .groupby(['date', 'symbol'])
+            .mean()
+            .unstack('symbol')
+    )
+    olhc_month = day2month(table2, swaplevel=True)
+    print(olhc_month)

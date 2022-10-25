@@ -12,7 +12,7 @@ if __name__ == '__main__':
     start_date = '20220121'
     end_date = '20220121'
     database = 'test1'
-    table_name = 'test_wset4'
+    table_name = 'test_wset5'
     wind_tableName = "IndexConstituent"
     options = "date={0};windcode={1}"
     # "Period=W;Currency=CNY;PriceAdj=B"     # for stock.
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     date_range = pd.date_range(start_date, end_date)
     for rpt_date in date_range:
         rpt_date = str(rpt_date.date())   # coonvert to '2021-12-31'
-        wse_loader.fetch_historical_data(rpt_date, wind_code)
+        wse_loader.fetch_historical_data(rpt_date, wind_code, UPLOAD_GITHUB=True)
 
     # loader.upload_csv()
     # data = loader.fetchall_data('601989.SH', table_name)

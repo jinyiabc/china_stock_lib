@@ -8,7 +8,10 @@ src/helper/WSETLoader.py
 src/helper/WSSLoader.py
 src/helper/__init__.py
 src/helper/bond.py
+src/helper/configSQL.py
+src/helper/database.py
 src/helper/get_data.py
+src/helper/models.py
 src/helper/mysql.cfg
 src/helper/mysql_dbconnection.py
 src/helper/parametrizedtestcase.py

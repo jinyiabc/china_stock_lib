@@ -29,3 +29,10 @@ Update mysql.cfg under directory. Checked the path by: \
 `wsd -s "20211231" -e "20211231" -d test1 -t test_wsd3` \
 `wset -s "20220121" -e "20220121" -d test1 -t test_wset1 -se '000300.SH' --github` \
 `wss -s "20201231" -e "20201231" -d test1 -t wind_energy_cbond -w '000001.SZ,110034.SH'` \
+
+
+# build 
+Open linux command window.
+python -m build --wheel
+cd dist 
+pip install helper_jinyi-1.0.17-py3-none-any.whl
